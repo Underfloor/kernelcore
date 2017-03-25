@@ -1,6 +1,6 @@
 // JavaScript source code
 /*
-  Bot destiné au Discord de Kernel Concept
+  Bot destinÃ© au Discord de Kernel Concept
   
   @author ql28
   @thanks Zatsune No Mokou, Nigth
@@ -37,7 +37,7 @@ bot.on('message', message => {
     else if (message.content === '!avatar') {
         message.channel.sendMessage(message.author.avatarURL);
     }
-    // commande !myroles -> affiche la liste des rôles d'un membre
+    // commande !myroles -> affiche la liste des rÃ´les d'un membre
     else if (message.content === '!mesroles') {
         message.channel.sendMessage("Liste des roles de " + message.author.username + " :");
         var ret = '';
@@ -48,7 +48,7 @@ bot.on('message', message => {
         }
         message.channel.sendMessage("" + ret);
     }
-    // commande !roles -> affiche la liste des rôles du serveur
+    // commande !roles -> affiche la liste des rÃ´les du serveur
     else if (message.content === '!roles') {
         message.channel.sendMessage("", { file: "images/roles.jpg"});
         /*message.channel.sendMessage("Liste des roles :");
@@ -60,7 +60,7 @@ bot.on('message', message => {
         }
         message.channel.sendMessage("" + ret);*/
     }
-    // commande !createProfile -> creation du profil d'un membre (à automatiser à la 1ere connexion sur le serveur) 
+    // commande !createProfile -> creation du profil d'un membre (Ã  automatiser Ã  la 1ere connexion sur le serveur) 
     else if (message.content === '!initProfil') {
         var fichiermembre = '';
         fichiermembre = message.author.id + '\n'; //id
@@ -74,11 +74,11 @@ bot.on('message', message => {
             if (!err) console.log("It's saved!");
         });
     }
-    // commande !merci -> donne un point de soutien au membre cité
+    // commande !merci -> donne un point de soutien au membre citÃ©
     else if (message.content.startsWith('!merci')) {
-        //recuperation du 1er membre mentionné
+        //recuperation du 1er membre mentionnÃ©
         let userMentioned = message.mentions.users.first();
-        //si un membre est mentionné et si l'auteur du message n'a pas envoyé de message récemment
+        //si un membre est mentionnÃ© et si l'auteur du message n'a pas envoyÃ© de message rÃ©cemment
         if(userMentioned !== undefined && userMentioned !== message.author){
             var dernierSoutien = fs.readFileSync('./profiles/' + message.author.id).toString().split("\n");
             if(dernierSoutien[4] + 18000000 < Date.now()){
@@ -99,20 +99,20 @@ bot.on('message', message => {
                 message.channel.sendMessage(userMentioned + ' obtient un soutien de plus, il en a ' + nbmerci + ' !');
             }
             else{
-                message.reply('vous avez déjà soutenu un créa ces 5 dernière heures, attendez un peu !');
+                message.reply('vous avez dÃ©jÃ  soutenu un crÃ©a ces 5 derniÃ¨re heures, attendez un peu !');
             }
         }
         else{
             message.channel.sendMessage('```!merci @pseudo (un soutien toutes les 5 heures; vous ne pouvez pas vous auto-remercier !)```');
         }
     }
-    // commande !profile ->génère une image du profil d'un membre de Kernel Concept
+    // commande !profile ->gÃ©nÃ¨re une image du profil d'un membre de Kernel Concept
     else if (message.content.startsWith('!profil')) {
-        //recuperation du 1er membre mentionné
+        //recuperation du 1er membre mentionnÃ©
         let userMentioned = message.mentions.users.first();
-        //si un utilisateur est mentionné, récupérer le profil de ce dernier
+        //si un utilisateur est mentionnÃ©, rÃ©cupÃ©rer le profil de ce dernier
         if(userMentioned !== undefined){
-            //récupération du contenu du fichier profil
+            //rÃ©cupÃ©ration du contenu du fichier profil
             var profil = fs.readFileSync('./profiles/' + userMentioned.id).toString().split("\n");
 
             var fileName = 'images/template.png';
@@ -126,17 +126,22 @@ bot.on('message', message => {
                 let [template, avatar, font] = images;
                 avatar = avatar.scaleToFit(128,128);    
                 template.blit(avatar, 128, 0);
-                template.print(font, 10, 10, userMentioned.username);
+                template.print(font, 10, 10, userMentioned.displayName);
                 template.print(font, 10, 30, 'niveau : ' + profil[1]);
-                template.print(font, 10, 50, 'xp : ' + profil[2]);
+                if(profil[2].toString() === '0'){
+                    template.print(font, 10, 50, 'disponible : oui');
+                }
+                else{
+                    template.print(font, 10, 50, 'disponible : non');
+                }
                 template.print(font, 10, 70, 'merci : ' + profil[3]).write('images/template_temp.png', function(){message.channel.sendMessage("", { file: "images/template_temp.png"});});
             }).catch(function (err) {
                 console.log(err);
             });
         }
-        //si pas d'utilisateur mentionné, récupérer le profil de celui qui a tapé la commande
+        //si pas d'utilisateur mentionnÃ©, rÃ©cupÃ©rer le profil de celui qui a tapÃ© la commande
         else{
-            //récupération du contenu du fichier profil
+            //rÃ©cupÃ©ration du contenu du fichier profil
             var profil = fs.readFileSync('./profiles/' + message.author.id).toString().split("\n");
 
             var fileName = 'images/template.png';
@@ -152,7 +157,12 @@ bot.on('message', message => {
                 template.blit(avatar, 128, 0);
                 template.print(font, 10, 10, message.author.username);
                 template.print(font, 10, 30, 'niveau : ' + profil[1]);
-                template.print(font, 10, 50, 'xp : ' + profil[2]);
+                if(profil[2].toString() === '0'){
+                    template.print(font, 10, 50, 'disponible : oui');
+                }
+                else{
+                    template.print(font, 10, 50, 'disponible : non');
+                }
                 template.print(font, 10, 70, 'merci : ' + profil[3]).write('images/template_temp.png', function(){message.channel.sendMessage("", { file: "images/template_temp.png"});});
             }).catch(function (err) {
                 console.log(err);
@@ -164,11 +174,11 @@ bot.on('message', message => {
         let args = message.content.split(" ").slice(1);
         let rep = args[0];
         var profilMembre = fs.readFileSync('./profiles/' + message.author.id).toString().split("\n");
-        if(rep === 'oui' && profilMembre[2] !== 0){
+        if(rep === 'oui'){
             var fichiermembre = '';
             fichiermembre = message.author.id + '\n'; //id
             fichiermembre += profilMembre[1] + '\n'; //niveau principal
-            fichiermembre += 0 + '\n'; //dispo
+            fichiermembre += '0\n'; //dispo
             fichiermembre += profilMembre[3] + '\n'; //nombre de soutien
             fichiermembre += profilMembre[4] + '\n'; //date dernier soutien
             fichiermembre += profilMembre[5] + '\n'; //nombre de messages
@@ -176,12 +186,13 @@ bot.on('message', message => {
             fs.writeFile('./profiles/' + message.author.id, fichiermembre, { flag: 'w' }, function (err) {
                 if (!err) console.log("It's saved!");
             });
+            message.channel.sendMessage(message.author.username + ' est maintenant disponible pour participer Ã  des projets !');
         }
-        else if(rep === 'non' && profilMembre[2] !== 1){
+        else if(rep === 'non'){
             var fichiermembre = '';
             fichiermembre = message.author.id + '\n'; //id
             fichiermembre += profilMembre[1] + '\n'; //niveau principal
-            fichiermembre += 1 + '\n'; //dispo
+            fichiermembre += '1\n'; //dispo
             fichiermembre += profilMembre[3] + '\n'; //nombre de soutien
             fichiermembre += profilMembre[4] + '\n'; //date dernier soutien
             fichiermembre += profilMembre[5] + '\n'; //nombre de messages
@@ -189,34 +200,21 @@ bot.on('message', message => {
             fs.writeFile('./profiles/' + message.author.id, fichiermembre, { flag: 'w' }, function (err) {
                 if (!err) console.log("It's saved!");
             });
+            message.channel.sendMessage(message.author.username + ' est maintenant disponible pour participer Ã  des projets !');
         }
         else{
-            message.channel.sendMessage('```!dispo oui|non (indiquez si vous êtes disponibles pour participer à des projets ou déjà occupé.)```');
-        }
-
-        for (var [key, membre] of message.guild.members.entries()){
-            var fichiermembre = '';
-            fichiermembre = membre.id + '\n'; //id
-            fichiermembre += '0\n'; //niveau principal
-            fichiermembre += '0\n'; //disponibilité
-            fichiermembre += '0\n'; //nombre de soutien
-            fichiermembre += '0\n'; //date dernier soutien
-            fichiermembre += '0\n'; //nombre de messages
-
-            fs.writeFile('./profiles/' + membre.id, fichiermembre, { flag: 'w' }, function (err) {
-                if (!err) console.log("It's saved!");
-            });
+            message.channel.sendMessage('```!dispo oui|non (indiquez si vous Ãªtes disponibles pour participer Ã  des projets ou dÃ©jÃ  occupÃ©.)```');
         }
     }
 
-    // commande !initAllProfils -> génère le fichier profil de chaque membre (admin)
+    // commande !initAllProfils -> gÃ©nÃ¨re le fichier profil de chaque membre (admin)
     else if (message.content.startsWith('!initAllProfils') && message.author.id === '274276871514882059') {
         
         for (var [key, membre] of message.guild.members.entries()){
             var fichiermembre = '';
             fichiermembre = membre.id + '\n'; //id
             fichiermembre += '0\n'; //niveau principal
-            fichiermembre += '0\n'; //disponibilité
+            fichiermembre += '0\n'; //disponibilitÃ©
             fichiermembre += '0\n'; //nombre de soutien
             fichiermembre += '0\n'; //date dernier soutien
             fichiermembre += '0\n'; //nombre de messages
@@ -230,16 +228,18 @@ bot.on('message', message => {
     else if (message.content.startsWith('!commandes')) {
         var affichageCommande = '';
         affichageCommande = '```!profil -> affiche votre profil.\n';
-        affichageCommande += '!profil @pseudo -> affiche le profil d\'un membre à partir de son @.\n';
-        affichageCommande += '!mesroles -> affiche la liste de vos rôles.\n';
-        affichageCommande += '!roles -> affiche la liste de tous les rôles du serveur.\n';
-        affichageCommande += '!dispo oui|non -> indique si vous êtes disponibles pour participer à des projets ou déjà occupé.\n';
-        affichageCommande += '!initProfil -> ré-initialise votre profil. /!\\ \n```';
+        affichageCommande += '!profil @pseudo -> affiche le profil d\'un membre Ã  partir de son @.\n';
+        affichageCommande += '!mesroles -> affiche la liste de vos rÃ´les.\n';
+        affichageCommande += '!roles -> affiche la liste de tous les rÃ´les du serveur.\n';
+        affichageCommande += '!dispo oui|non -> indique si vous Ãªtes disponibles pour participer Ã  des projets ou dÃ©jÃ  occupÃ©.\n';
+        affichageCommande += '!initProfil -> rÃ©-initialise votre profil. /!\\ \n```';
         message.channel.sendMessage(affichageCommande);
     }
 });
 
 bot.on('guildMemberAdd', membre => {
+    message.channel.sendMessage('Bienvenue sur Kernel Concept ' + membre + ' !');
+
     var fichiermembre = '';
     fichiermembre = membre.id + '\n'; //id
     fichiermembre += '0\n'; //niveau principal
