@@ -5,20 +5,16 @@ let InitProfil = function () {
 
   this.handle = (message) => {
     if (!fs.existsSync(`./profiles/${message.author.id}`)) {
-      let profil = // id, niveau, dispo, soutiens, date dernier soutien, messages
-`${message.author.id}
-0
-0
-0
-0
-0`
-      ;
+      let profil = {
+        id: message.author.id,
+        level: 0,
+        disponibility: false,
+        supports: 0,
+        lastSupport: null,
+        messages: 0
+      };
 
-      fs.writeFile(`./profiles/${message.author.id}`, profil, {flag: 'w'}, (err) => {
-        if (!err) {
-          console.log(`${message.author.id} : profile saved.`);
-        }
-      });
+      fs.writeFileSync(`./profiles/${message.author.id}`, JSON.stringify(profil));
     }
   }
 }
