@@ -8,8 +8,11 @@ let Profil = function() {
   this.handle = (message) => {
     let userMentioned = message.mentions.users.first();
     
-    if (userMentioned === undefined) { // @TODO catch bot
+    if (userMentioned === undefined) {
       userMentioned = message.author;
+    }
+    if (userMentioned.bot) {
+      return;
     }
 
     let userProfile = JSON.parse(fs.readFileSync(`./profiles/${message.author.id}`));
@@ -28,6 +31,7 @@ let Profil = function() {
       template.print(font, 10, 30, `niveau : ${userProfile.level}`);
       template.print(font, 10, 50, `disponible : ${userProfile.disponibility ? "oui" : "non"}`);
       template.print(font, 10, 70, `merci : ${userProfile.supports}`);
+      template.print(font, 10, 90, `messages: ${userProfile.messages}`);
       template.write('images/template_temp.png', () => {
         message.channel.sendMessage('', {
           file: "images/template_temp.png"

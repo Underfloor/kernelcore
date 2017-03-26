@@ -7,7 +7,7 @@ let Merci = function() {
   this.handle = (message) => {
     let userMentioned = message.mentions.users.first();
 
-    if (userMentioned !== undefined && userMentioned !== message.author) { // @TODO catch bot
+    if (userMentioned !== undefined && userMentioned !== message.author && !userMentioned.bot) {
       var userProfile = JSON.parse(fs.readFileSync(`./profiles/${message.author.id}`));
 
       if (userProfile.lastSupport === null || userProfile.lastSupport - 18000000 < Date.now()) {
