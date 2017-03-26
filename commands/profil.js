@@ -15,12 +15,12 @@ let Profil = function() {
       return;
     }
 
-    let userProfile = JSON.parse(fs.readFileSync(`./profiles/${message.author.id}`));
+    let userProfile = JSON.parse(fs.readFileSync(`./profiles/${userMentioned.id}`));
 
     let fileName = 'images/template.png';
     let template;
     let p1 = Jimp.read(fileName);
-    let p2 = Jimp.read(userMentioned.avatarURL);
+    let p2 = Jimp.read(userMentioned.avatarURL !== null ? userMentioned.avatarURL : fileName);
     let p3 = Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
 
     Promise.all([p1, p2, p3]).then((images) => {
