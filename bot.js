@@ -14,11 +14,19 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const Jimp = require('jimp')
 
+// imports commands
+const commands = [
+  require("./commands/initProfil"),
+  require("./commands/avatar"),
+  require("./commands/mesroles"),
+  require("./commands/commandes")
+];
+
 // create an instance of a Discord Client, and call it bot
 const bot = new Discord.Client();
 
 // the token of your bot - https://discordapp.com/developers/applications/me
-const token = '';
+const token = 'Mjk1MzYxNjA0NjA4OTgzMDQw.C7ikdQ.Xk1kIYUgDzf6NOl1H5Z4Zy8GxgI';
 
 // the ready event is vital, it means that your bot will only start reacting to information
 // from Discord _after_ ready is emitted.
@@ -32,21 +40,6 @@ bot.on('message', message => {
     // --------------------- LISTE DES COMMANDES ------------------------//
     if (message.author.bot) {
         return;
-    }
-    // commande !avatar -> affiche l'avatar du membre en grand
-    else if (message.content === '!avatar') {
-        message.channel.sendMessage(message.author.avatarURL);
-    }
-    // commande !myroles -> affiche la liste des rôles d'un membre
-    else if (message.content === '!mesroles') {
-        message.channel.sendMessage("Liste des roles de " + message.author.username + " :");
-        var ret = '';
-        for (var [key, rolemembre] of message.member.roles.entries()){
-            if(rolemembre.name !== "@everyone"){
-                ret =  ret + " | " + rolemembre.name;
-            }
-        }
-        message.channel.sendMessage("" + ret);
     }
     // commande !roles -> affiche la liste des rôles du serveur
     else if (message.content === '!roles') {
@@ -234,6 +227,12 @@ bot.on('message', message => {
         affichageCommande += '!dispo oui|non -> indique si vous êtes disponibles pour participer à des projets ou déjà occupé.\n';
         affichageCommande += '!initProfil -> ré-initialise votre profil. /!\\ \n```';
         message.channel.sendMessage(affichageCommande);
+    }
+
+    for (command of commands) {
+      if (message.content.startsWith(command.command)) {
+        command.handle(message, commands);
+      }
     }
 });
 
