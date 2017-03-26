@@ -20,7 +20,8 @@ const commands = [
   require("./commands/commandes"),
   require("./commands/merci"),
   require("./commands/dispo"),
-  require("./commands/profil")
+  require("./commands/profil"),
+  require("./commands/rolemembres")
 ];
 
 // create an instance of a Discord Client, and call it bot
